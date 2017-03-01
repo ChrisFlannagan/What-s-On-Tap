@@ -31,13 +31,12 @@ class ShortCode {
 		/* No matter what is passed we will create a Tap_List object and manually fill it or load from a post type */
 		if ( strpos( $options['tap-list'], ',' ) !== false ) {
 			// Display a list of taps
-		} elseif ( intval( $options['tap-list'] == 0 ) ) {
+		} elseif ( intval( $options['tap-list'] ) == 0 ) {
 			$tap_list = new TapList();
 			$tap_list->load_list_with_all_taps();
 			$tap_list->display_taps();
-			return ob_get_clean();
 		} elseif ( intval( $options['tap-list'] ) > 0 ) {
-			// Display a tap list post type
+			// Display a tap list's post meta of taps
 		}
 
 		return ob_get_clean();

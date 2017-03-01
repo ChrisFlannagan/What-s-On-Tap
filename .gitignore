@@ -1,0 +1,5 @@
+.idea
+assets/css/plugin.min.css
+assets/js/plugin.min.js
+node_modules
+vendor

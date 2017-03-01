@@ -2,7 +2,7 @@
 
 namespace whatsontap\post_types;
 
-class Tap_Lists {
+class TapLists {
 	public function __construct() {
 		add_action( 'init', array( $this, 'create' ) );
 		add_action( 'add_meta_boxes_' . WIC_PLUGIN_PREFIX . '-tap-lists', array( $this, 'register_meta' ) );

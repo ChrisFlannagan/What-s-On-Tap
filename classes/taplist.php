@@ -27,16 +27,15 @@ class TapList {
 			'post_status' => 'publish',
 			'fields' => 'ids',
 		) );
-		var_dump( $taps );
 
-		foreach( $taps as $tap ) {
-			$taps[] = new Tap( $tap->id );
+		foreach( $taps->posts as $tap ) {
+			$this->taps[] = new Tap( $tap );
 		}
 	}
 
 	public function display_taps() {
 		foreach( $this->taps as $tap ) {
-
+			$tap->display_tap();
 		}
 	}
 }

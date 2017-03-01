@@ -1,4 +1,20 @@
 <?php
+/**
+ * Class TapLists
+ *
+ * PHP version 7.1
+ *
+ * @package whatsontap\post_types
+ * @author Chris Flannagan <chris@flowpress.com>
+ * @copyright 2017 FlowPress
+ * @version 0.1
+ * @since 0.1
+ */
+
+/**
+ * Used to generate our WIC_PLUGIN_PREFIX-tap-lists post type.  This will store a list of tap id's in post meta and
+ * sorting methods for the taps.
+ */
 
 namespace whatsontap\post_types;
 

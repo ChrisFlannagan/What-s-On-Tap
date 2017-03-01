@@ -1,4 +1,20 @@
 <?php
+/**
+ * Class Styles
+ *
+ * PHP version 7.1
+ *
+ * @package whatsontap\taxonomies
+ * @author Chris Flannagan <chris@flowpress.com>
+ * @copyright 2017 FlowPress
+ * @version 0.1
+ * @since 0.1
+ */
+
+/**
+ * Used to generate a styles taxonomy for the WIC_PLUGIN_PREFIX-taps post type.  This will generally be used for storing
+ * styles of beer such as IPA, Stout, Pale Ale and so on and will generate an initial list of terms.
+ */
 
 namespace whatsontap\taxonomies;
 

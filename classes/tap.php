@@ -1,4 +1,19 @@
 <?php
+/**
+ * Class Tap
+ *
+ * PHP version 7.1
+ *
+ * @package whatsontap
+ * @author Chris Flannagan <chris@flowpress.com>
+ * @copyright 2017 FlowPress
+ * @version 0.1
+ * @since 0.1
+ */
+
+/**
+ * Used for initializing the a tap object.  Taps must be tied to a post with post type WIC_PLUGIN_PREFIX-taps.
+ */
 
 namespace whatsontap;
 

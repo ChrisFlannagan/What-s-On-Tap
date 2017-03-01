@@ -1,4 +1,19 @@
 <?php
+/**
+ * Class Taps
+ *
+ * PHP version 7.1
+ *
+ * @package whatsontap\post_types
+ * @author Chris Flannagan <chris@flowpress.com>
+ * @copyright 2017 FlowPress
+ * @version 0.1
+ * @since 0.1
+ */
+
+/**
+ * Used to generate our WIC_PLUGIN_PREFIX-taps post type.  All information for individual taps are stored as post meta.
+ */
 
 namespace whatsontap\post_types;
 

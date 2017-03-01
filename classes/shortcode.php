@@ -1,4 +1,19 @@
 <?php
+/**
+ * Class ShortCode
+ *
+ * PHP version 7.1
+ *
+ * @package whatsontap
+ * @author Chris Flannagan <chris@flowpress.com>
+ * @copyright 2017 FlowPress
+ * @version 0.1
+ * @since 0.1
+ */
+
+/**
+ * This shortcode is used to display a tap listing in html
+ */
 
 namespace whatsontap;
 

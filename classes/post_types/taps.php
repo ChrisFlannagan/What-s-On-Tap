@@ -19,7 +19,7 @@ namespace whatsontap\post_types;
 
 class Taps {
 	public function __construct() {
-		add_action( 'init', array( $this, 'create' ) );
+		add_action( 'init', array( $this, 'create' ), 20 );
 		add_action( 'add_meta_boxes_' . WIC_PLUGIN_PREFIX . '-taps', array( $this, 'register_meta' ) );
 		add_action( 'save_post_' . WIC_PLUGIN_PREFIX . '-taps', array( $this, 'save_meta' ) );
 	}

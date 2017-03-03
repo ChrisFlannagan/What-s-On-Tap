@@ -38,7 +38,8 @@ var js = {
         'assets/js/components/**/*.js']
 };
 var adminjs = {
-    in: ['assets/js/admin/*.js']
+    in: ['assets/js/admin/*.js',
+        'assets/js/admin/**/*.js']
 };
 
 gulp.task('styles', ['fonts'], function() {
@@ -61,6 +62,10 @@ gulp.task('javascripts', function() {
         .pipe(concat('plugin.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('assets/js'));
+    gulp.src(adminjs.in)
+        .pipe(concat('pluginadmin.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('assets/js'));
 });
 
 
@@ -68,6 +73,8 @@ gulp.task('watch', function() {
     gulp.watch(scss.in,
         ['styles']);
     gulp.watch(js.in,
+        ['javascripts']);
+    gulp.watch(adminjs.in,
         ['javascripts']);
 });
 

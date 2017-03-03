@@ -49,9 +49,11 @@ class TapList {
 		}
 	}
 
-	public function display_taps() {
-		foreach( $this->taps as $tap ) {
-			$tap->display_tap();
-		}
-	}
+	public function display_taps() { ?>
+		<ul class="_wic_list-taps">
+		<?php foreach( $this->taps as $tap ) :
+				$tap->display_tap( [ '<li class="tap">', '</li>' ] ) ;
+		endforeach; ?>
+		</ul>
+	<?php }
 }

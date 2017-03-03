@@ -14,4 +14,6 @@
 require 'includes/constants.php';
 require 'vendor/autoload.php';
 
-add_action( 'init', [ '\whatsontap\WhatsOnTap', 'init' ] );
+add_action( 'init', [ '\whatsontap\WhatsOnTap', 'init' ], 10 );
+add_action( 'wp_enqueue_scripts', ['\whatsontap\WhatsOnTap', 'enqueue' ] );
+add_action( 'admin_enqueue_scripts', ['\whatsontap\WhatsOnTap', 'admin_enqueue' ] );

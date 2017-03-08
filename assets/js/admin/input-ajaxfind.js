@@ -5,7 +5,7 @@
 
     $ajaxfinder.keyup(function(e) {
         var _finder = $(e.target);
-        if(_finder.val().length > 3) {
+        if(_finder.val().length > 1) {
             var _data = $(_finder).data("find");
             console.log("Data: " + _data[0]);
             $.ajax({

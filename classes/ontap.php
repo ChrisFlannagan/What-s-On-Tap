@@ -17,7 +17,7 @@
 
 namespace whatsontap;
 
-class WhatsOnTap {
+class OnTap {
 
 	public static function init() {
 		$taps = new post_types\Taps();

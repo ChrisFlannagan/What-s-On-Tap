@@ -84,6 +84,7 @@ class TapLists {
 		$taps = (Array) get_post_meta( $post->ID, '_' . WIC_PLUGIN_PREFIX . '_taps', true );
 
 		?>
+		<input type="hidden" name="taps" value="<?php echo esc_attr( $taps ); ?>" />
 		<div class="inside">
 			<h4>Manage Tap List</h4>
 			<div class="container-fluid">
@@ -110,7 +111,12 @@ class TapLists {
 		</div>
 		<div class="inside">
 			<h4>Bulk Import</h4>
-			<textarea cols="80" rows="20"></textarea>
+			<p>
+				<textarea cols="80" rows="20" data-js-bulkimport-textarea></textarea>
+			</p>
+			<p>
+				<button type="button" data-js-bulkimport-btn><?php _e( 'Import', WIC_TEXT_DOMAIN ); ?></button>
+			</p>
 		</div>
 		<?php
 	}
@@ -123,14 +129,6 @@ class TapLists {
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return;
 		}
-		update_post_meta( $post_id, '_' . WIC_PLUGIN_PREFIX . '_date', sanitize_text_field( $_POST[ WIC_PLUGIN_PREFIX . '_date' ] ) );
-		update_post_meta( $post_id, '_' . WIC_PLUGIN_PREFIX . '_brewery', sanitize_text_field( $_POST[ WIC_PLUGIN_PREFIX . '_brewery' ] ) );
-		update_post_meta( $post_id, '_' . WIC_PLUGIN_PREFIX . '_abv', floatval( $_POST[ WIC_PLUGIN_PREFIX . '_abv' ] ) );
-
-		$website = trim( sanitize_text_field( $_POST[ WIC_PLUGIN_PREFIX . '_website_text' ] ) );
-		if ( strpos( $website, 'http' ) != 0 ) {
-			$website = 'http://' . $website;
-		}
-		update_post_meta( $post_id, '_' . WIC_PLUGIN_PREFIX . '_website_text', $website );
+		update_post_meta( $post_id, '_' . WIC_PLUGIN_PREFIX . '_taps', sanitize_text_field( $_POST[ WIC_PLUGIN_PREFIX . '_taps' ] ) );
 	}
 }

@@ -25,14 +25,24 @@ class AjaxFinder {
 			$field = sanitize_text_field( $this->d['field'] );
 
 			$sql = $wpdb->prepare(
-				"SELECT * FROM $wpdb->posts 
-				 WHERE post_type = %s AND $field LIKE %s",
+				"
+				 SELECT * FROM $wpdb->posts 
+				 WHERE ( post_type = %s AND $field LIKE %s ) OR 
+				 ID IN (
+				 	SELECT post_id FROM $wpdb->postmeta WHERE
+				 	meta_key = %s AND meta_value LIKE %s
+				 );
+				 ",
 				array(
 					WIC_PLUGIN_PREFIX . $this->d['find'],
+					'%' . $this->d['val'] . '%',
+					'_' . WIC_PLUGIN_PREFIX . $this->d['meta'],
 					'%' . $this->d['val'] . '%',
 				)
 			);
 			$posts = $wpdb->get_results( $sql, ARRAY_A );
+
+			echo $sql;
 
 			$results = '[';
 			foreach ( $posts as $post ) {

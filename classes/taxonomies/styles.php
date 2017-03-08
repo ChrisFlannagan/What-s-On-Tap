@@ -33,7 +33,7 @@ class Styles {
 				'slug' => WIC_PLUGIN_PREFIX . '-style-stout',
 			)
 		);
-		add_action( 'init', array( $this, 'create' ) );
+		add_action( 'init', array( $this, 'create' ), 20 );
 	}
 	
 	public function setup_defaults() {

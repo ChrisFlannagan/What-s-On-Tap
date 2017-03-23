@@ -42,15 +42,21 @@ class AjaxFinder {
 			);
 			$posts = $wpdb->get_results( $sql, ARRAY_A );
 
-			echo $sql;
-
-			$results = '[';
+			$response = array();
 			foreach ( $posts as $post ) {
-				$results .= '"' . str_replace( '"', '', $post[ $field ] ) . '",';
-			}
-			$results = rtrim( $results, ',' ) . ']';
+				$meta = '';
+				if ( isset( $this->d['meta'] ) && '' != $this->d['meta'] ) {
+					$meta = get_post_meta( $post['ID'], '_' . WIC_PLUGIN_PREFIX . $this->d['meta'], true );
+				}
 
-			echo $results;
+				$response[] = array(
+					'id' => $post['ID'],
+					'title' => $post['post_title'],
+					'meta' => $meta,
+				);
+			}
+
+			echo json_encode( $response );
 		} else {
 			echo '0';
 		}

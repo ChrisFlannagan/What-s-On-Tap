@@ -4,6 +4,7 @@ var minify = require('gulp-minify-css');
 var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
 var replace = require('gulp-replace');
+var notify = require("gulp-notify");
 
 // Bootstrap scss source
 var bootstrapSass = {
@@ -47,6 +48,9 @@ gulp.task('styles', ['fonts'], function() {
         .pipe(sass(scss.sassOpts).on('error', sass.logError))
         .pipe(concat('plugin.min.css'))
         .pipe(minify())
+        .on('error', function(err) {
+            return notify().write(err);
+        })
         .pipe(replace('../img/', '../imgs/'))
         .pipe(gulp.dest('assets/css'));
 });
@@ -61,10 +65,16 @@ gulp.task('javascripts', function() {
     gulp.src(js.in)
         .pipe(concat('plugin.min.js'))
         .pipe(uglify())
+        .on('error', function(err) {
+            return notify().write(err);
+        })
         .pipe(gulp.dest('assets/js'));
     gulp.src(adminjs.in)
         .pipe(concat('pluginadmin.min.js'))
         .pipe(uglify())
+        .on('error', function(err) {
+            return notify().write(err);
+        })
         .pipe(gulp.dest('assets/js'));
 });
 
@@ -78,4 +88,4 @@ gulp.task('watch', function() {
         ['javascripts']);
 });
 
-gulp.task('default', ['styles', 'javascripts', 'watch']);
+gulp.task('default', ['styles', 'fonts', 'javascripts', 'watch']);

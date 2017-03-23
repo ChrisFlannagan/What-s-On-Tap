@@ -23,6 +23,13 @@ class TapLists {
 		add_action( 'init', array( $this, 'create' ), 20 );
 		add_action( 'add_meta_boxes_' . WIC_PLUGIN_PREFIX . '-tap-lists', array( $this, 'register_meta' ) );
 		add_action( 'save_post_' . WIC_PLUGIN_PREFIX . '-tap-lists', array( $this, 'save_meta' ) );
+
+		if ( is_admin() ) {
+			add_action( 'admin_enqueue_scripts', function() {
+				wp_enqueue_script( 'jquery-ui-core' );
+				wp_enqueue_script( 'jquery-ui-sortable' );
+			} );
+		}
 	}
 
 	// register our post type
@@ -82,42 +89,53 @@ class TapLists {
 		wp_nonce_field( basename( __FILE__ ), WIC_PLUGIN_PREFIX . '_meta_box_nonce' );
 
 		$taps = (Array) get_post_meta( $post->ID, '_' . WIC_PLUGIN_PREFIX . '_taps', true );
+		if ( count( $taps ) == 1 && '' == $taps[0] ) $taps = array();
 
 		?>
-		<input type="hidden" name="taps" value="<?php echo esc_attr( $taps ); ?>" />
-		<div class="inside">
-			<h4>Manage Tap List</h4>
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-sm-6">
-						<label id="find-taps">
-							<input class="input-ajaxfind" placeholder="<?php _e( 'Search Taps', WIC_TEXT_DOMAIN ); ?>"
-							       data-find='["<?php 
-							       echo wp_create_nonce( WIC_PLUGIN_PREFIX . '-input_ajax_finder' );
-							       ?>","-taps","post_title","_brewery"]'
-							       type="text" id="find-taps" data-js-input-ajaxfinder />
-						</label>
-					</div>
-					<div class="col-sm-6">
-						<ul data-js-list-sortable>
-							<?php foreach ( $taps as $tap ) :
-								$tap = new \whatsontap\Tap( $tap );
-								$tap->display_tap( array( '<li>', '</li>' ) );
-							endforeach; ?>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="inside">
-			<h4>Bulk Import</h4>
-			<p>
-				<textarea cols="80" rows="20" data-js-bulkimport-textarea></textarea>
-			</p>
-			<p>
-				<button type="button" data-js-bulkimport-btn><?php _e( 'Import', WIC_TEXT_DOMAIN ); ?></button>
-			</p>
-		</div>
+        <div class="whats-on-tap">
+            <input type="hidden" name="taps" value="<?php echo esc_attr( $taps ); ?>" />
+            <div class="inside">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h4><?php _e( 'Add a Tap to List', FP_TEXT_DOMAIN ); ?></h4>
+                            <label id="find-taps">
+                                <input class="input-ajaxfind" placeholder="<?php _e( 'Search Taps', WIC_TEXT_DOMAIN ); ?>"
+                                       data-find='["<?php
+                                       echo wp_create_nonce( WIC_PLUGIN_PREFIX . '-input_ajax_finder' );
+                                       ?>","-taps","post_title","_brewery"]'
+                                       type="text" id="find-taps" autocomplete="off" data-js-input-ajaxfinder />
+                            </label>
+                            <h4>Bulk Import</h4>
+                            <p>
+                                <textarea cols="80" rows="20" data-js-bulkimport-textarea></textarea>
+                            </p>
+                            <p>
+                                <button type="button"
+                                        data-nonce="<?php echo wp_create_nonce( WIC_PLUGIN_PREFIX . '-input_ajax_importer' ); ?>"
+                                        data-js-bulkimport-btn><?php _e( 'Import', WIC_TEXT_DOMAIN ); ?></button>
+                            </p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h4><?php _e( 'Tap List', FP_TEXT_DOMAIN ); ?></h4>
+                            <ul class="list-suggested" data-js-list-sortable>
+                                <?php $found = ''; $cnt = 0; foreach ( $taps as $tap ) :
+                                    if ( 0 < intval( $tap ) ) :
+                                        $tap = new \whatsontap\Tap( $tap );
+                                        if ( is_a( $tap->tap, 'WP_Post' ) && $tap->tap->post_type == WIC_PLUGIN_PREFIX . '-taps' ) :
+                                            $found .= $tap->tap->ID . ';';
+                                            $tap->display_sort_tap( $cnt );
+                                            $cnt++;
+                                        endif;
+                                    endif;
+                                endforeach; ?>
+                            </ul>
+                        </div>
+                        <input type="hidden" name="<?php echo WIC_PLUGIN_PREFIX; ?>_taps" value="<?php echo $found; ?>"data-js-input-found />
+                    </div>
+                </div>
+            </div>
+        </div>
 		<?php
 	}
 
@@ -129,6 +147,8 @@ class TapLists {
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return;
 		}
-		update_post_meta( $post_id, '_' . WIC_PLUGIN_PREFIX . '_taps', sanitize_text_field( $_POST[ WIC_PLUGIN_PREFIX . '_taps' ] ) );
+
+		$taps = explode( ';', rtrim( $_POST[ WIC_PLUGIN_PREFIX . '_taps' ], ';' ) );
+		update_post_meta( $post_id, '_' . WIC_PLUGIN_PREFIX . '_taps', $taps );
 	}
 }

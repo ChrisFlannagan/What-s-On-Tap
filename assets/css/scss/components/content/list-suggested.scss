@@ -1,0 +1,24 @@
+.list-suggested {
+  > .menuitem {
+    background: #ececec;
+    border-radius: 10px;
+    cursor: move;
+    font-size: 20px;
+    padding: 10px;
+    > .meta {
+      color: #00ccaa;
+      font-size: 15px;
+    }
+    > .remove {
+      color: Red;
+      cursor: pointer;
+      font-size: 10px;
+    }
+    &:before {
+      @extend .fa;
+      @extend .fa-arrows-v;
+      color: #00ccaa;
+      font-size: 20px;
+    }
+  }
+}

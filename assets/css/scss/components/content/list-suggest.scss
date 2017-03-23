@@ -1,0 +1,25 @@
+.list-suggest {
+  background: $secondarybg;
+  border: solid 1px #ccc;
+  border-bottom: 0;
+  position: absolute;
+  width: 100%;
+  z-index: 9999;
+  > .result {
+    border-bottom: solid 1px #ccc;
+    cursor: pointer;
+    margin-bottom: 0;
+    padding: 5px;
+    > .meta {
+      color: #00A8EF;
+      float: right;
+      font-size: 8px;
+    }
+    > .remove {
+      display: none;
+    }
+    &.-selected {
+      background: #cc99c2;
+    }
+  }
+}

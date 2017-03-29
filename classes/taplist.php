@@ -78,7 +78,7 @@ class TapList {
 	    foreach( $this->taps as $tap ) {
 	        $json_taps[] = $tap->json();
         }
-        return json_encode( $json_taps );
+        return $json_taps;
     }
 
 	public function display_taps() { ?>

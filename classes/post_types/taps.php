@@ -22,6 +22,11 @@ class Taps {
 		add_action( 'init', array( $this, 'create' ), 20 );
 		add_action( 'add_meta_boxes_' . WIC_PLUGIN_PREFIX . '-taps', array( $this, 'register_meta' ) );
 		add_action( 'save_post_' . WIC_PLUGIN_PREFIX . '-taps', array( $this, 'save_meta' ) );
+
+        add_filter( 'manage_' . WIC_PLUGIN_PREFIX . '-taps_posts_columns', array( $this, 'admin_columns' ) ) ;
+        add_action( 'manage_' . WIC_PLUGIN_PREFIX . '-taps_posts_custom_column' , array( $this, 'admin_columns_content' ), 10, 2 );
+        add_filter( 'manage_edit-' . WIC_PLUGIN_PREFIX . '-taps_sortable_columns', array( $this, 'admin_columns_sort' ) );
+        add_action( 'pre_get_posts', array( $this, 'sort_by_metakey' ), 1 );
 	}
 
 	// register our post type
@@ -139,4 +144,55 @@ class Taps {
 		}
 		update_post_meta( $post_id, '_' . WIC_PLUGIN_PREFIX . '_website_text', $website );
 	}
+
+    function admin_columns( $columns ) {
+        $new_columns = array(
+            'brewery' => __( 'Brewery', WIC_TEXT_DOMAIN ),
+            'title' => $columns['title'],
+            'tapped_date' => __( 'Date Tapped', WIC_TEXT_DOMAIN ),
+        );
+
+        return $new_columns;
+    }
+
+    function admin_columns_content( $column, $post_id ) {
+        switch ( $column ) {
+
+            case 'brewery' :
+                echo esc_attr( get_post_meta( $post_id, '_' . WIC_PLUGIN_PREFIX . '_brewery', true ) );
+                break;
+            case 'tapped_date' :
+                echo esc_attr( get_post_meta( $post_id, '_' . WIC_PLUGIN_PREFIX . '_date', true ) );
+                break;
+
+        }
+    }
+
+    function admin_columns_sort( $sortable_columns ) {
+        $sortable_columns[ 'brewery' ] = '_' . WIC_PLUGIN_PREFIX . '_brewery';
+        $sortable_columns[ 'tapped_date' ] = '_' . WIC_PLUGIN_PREFIX . '_date';
+        return $sortable_columns;
+    }
+
+    function sort_by_metakey( $query ) {
+        /**
+         * @var $query \WP_Query
+         */
+        if ( $query->is_main_query() && ( $orderby = $query->get( 'orderby' ) ) ) {
+
+            switch( $orderby ) {
+
+                case '_' . WIC_PLUGIN_PREFIX . '_brewery':
+                    // set our query's meta_key, which is used for custom fields
+                    $query->set( 'meta_key', '_' . WIC_PLUGIN_PREFIX . '_brewery' );
+                    $query->set( 'orderby', 'meta_value' );
+                    break;
+                case '_' . WIC_PLUGIN_PREFIX . '_date':
+                    // set our query's meta_key, which is used for custom fields
+                    $query->set( 'meta_key', '_' . WIC_PLUGIN_PREFIX . '_date' );
+                    $query->set( 'orderby', 'meta_value' );
+                    break;
+            }
+        }
+    }
 }

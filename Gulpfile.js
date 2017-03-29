@@ -27,7 +27,6 @@ var fonts = {
 
 var scss = {
     in: ['assets/css/scss/base.scss',
-        'node_modules/fancybox/dist/scss/jquery.fancybox.scss',
         'assets/css/scss/components/**/*.scss'],
     sassOpts: {
         includePaths: [bootstrapSass.in + 'assets/stylesheets']
@@ -51,7 +50,14 @@ gulp.task('styles', ['fonts'], function() {
         .on('error', function(err) {
             return notify().write(err);
         })
-        .pipe(replace('../img/', '../imgs/'))
+        .pipe(gulp.dest('assets/css'));
+    gulp.src('assets/css/scss/admin/*.scss')
+        .pipe(sass(scss.sassOpts).on('error', sass.logError))
+        .pipe(concat('plugin.admin.min.css'))
+        .pipe(minify())
+        .on('error', function(err) {
+            return notify().write(err);
+        })
         .pipe(gulp.dest('assets/css'));
 });
 // copy bootstrap required fonts to dest

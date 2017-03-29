@@ -13,6 +13,7 @@
 
 require_once( 'includes/constants.php' );
 require_once( 'vendor/autoload.php' );
+require_once( 'includes/functions.php' );
 
 \whatsontap\OnTap::init();
 add_action( 'wp_enqueue_scripts', function() { \whatsontap\OnTap::enqueue(); } );

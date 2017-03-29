@@ -88,8 +88,8 @@ class TapLists {
 		global $post;
 		wp_nonce_field( basename( __FILE__ ), WIC_PLUGIN_PREFIX . '_meta_box_nonce' );
 
-		$taps = (Array) get_post_meta( $post->ID, '_' . WIC_PLUGIN_PREFIX . '_taps', true );
-		if ( count( $taps ) == 1 && '' == $taps[0] ) $taps = array();
+		$taplist = new \whatsontap\TapList( $post->ID );
+		$taps = $taplist->taps;
 
 		?>
         <div class="whats-on-tap">
@@ -106,9 +106,14 @@ class TapLists {
                                        ?>","-taps","post_title","_brewery"]'
                                        type="text" id="find-taps" autocomplete="off" data-js-input-ajaxfinder />
                             </label>
-                            <h4>Bulk Import</h4>
+                            <h4><?php _e( 'Bulk Import', WIC_PLUGIN_PREFIX ); ?></h4>
                             <p>
-                                <textarea cols="80" rows="20" data-js-bulkimport-textarea></textarea>
+                                <?php ob_start(); ?>
+                                Write one beer name per line, do not include brewery or any other information, that will be added later.
+                                <?php echo _e( ob_get_clean(), WIC_PLUGIN_PREFIX ); ?>
+                            </p>
+                            <p>
+                                <textarea cols="40" rows="20" data-js-bulkimport-textarea></textarea>
                             </p>
                             <p>
                                 <button type="button"
@@ -120,14 +125,10 @@ class TapLists {
                             <h4><?php _e( 'Tap List', FP_TEXT_DOMAIN ); ?></h4>
                             <ul class="list-suggested" data-js-list-sortable>
                                 <?php $found = ''; $cnt = 0; foreach ( $taps as $tap ) :
-                                    if ( 0 < intval( $tap ) ) :
-                                        $tap = new \whatsontap\Tap( $tap );
-                                        if ( is_a( $tap->tap, 'WP_Post' ) && $tap->tap->post_type == WIC_PLUGIN_PREFIX . '-taps' ) :
-                                            $found .= $tap->tap->ID . ';';
-                                            $tap->display_sort_tap( $cnt );
-                                            $cnt++;
-                                        endif;
-                                    endif;
+                                    $found .= $tap->tap->ID . ';';
+                                    /** @var $tap \whatsontap\Tap */
+                                    $tap->display_sort_tap( $cnt );
+                                    $cnt++;
                                 endforeach; ?>
                             </ul>
                         </div>

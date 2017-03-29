@@ -1,0 +1,18 @@
+@import 'variables';
+@import '../../../../node_modules/font-awesome/scss/font-awesome';
+@import 'bootstrap';
+
+@import 'content/list-suggest';
+@import 'content/list-suggested';
+@import 'content/list-taps';
+
+/** Taps Admin Listing */
+html {
+  table.fixed {
+    .column-brewery {
+      @media ( min-width: 960px ) {
+        width: 15%;
+      }
+    }
+  }
+}

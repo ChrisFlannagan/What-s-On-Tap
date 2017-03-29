@@ -24,21 +24,24 @@ class ShortCode {
 
 	public function display_taps( $atts = array(), $content = null ) {
 		$options = shortcode_atts( array(
-			'tap-list' => 0,
+			'taplist' => 0,
+            'brewery_color' => '',
+            'beer_color' => '',
 		), $atts );
 		ob_start();
-
 		/* No matter what is passed we will create a Tap_List object and manually fill it or load from a post type */
-		if ( strpos( $options['tap-list'], ',' ) !== false ) {
+		if ( strpos( $options['taplist'], ',' ) !== false ) {
 			// Display a list of taps
-		} elseif ( intval( $options['tap-list'] ) == 0 ) {
+		} elseif ( intval( $options['taplist'] ) == 0 ) {
 			$tap_list = new TapList();
 			$tap_list->load_list_with_all_taps();
 			$tap_list->display_taps();
-		} elseif ( intval( $options['tap-list'] ) > 0 ) {
-			// Display a tap list's post meta of taps
+		} elseif ( intval( $options['taplist'] ) > 0 ) {
+			// Display a Tap List posts listing
+            $tap_list = new TapList( $options['taplist'], $options );
+            $tap_list->display_taps();
 		}
 
-		return ob_get_clean();
+		echo ob_get_clean();
 	}
 }

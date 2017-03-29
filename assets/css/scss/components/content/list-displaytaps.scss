@@ -1,0 +1,31 @@
+.list-displaytaps {
+  padding: 10px;
+  > .tap {
+    border: solid 1px #ccc;
+    list-style-type: none;
+    margin: 5px;
+    padding: 5px;
+    > .beer {
+      > i {
+        @extend .fa;
+        @extend .fa-beer;
+      }
+      > .title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      > .subtitle {
+        font-size: 10px;
+      }
+    }
+    > .meta {
+      background: #f1f1f1;
+      font-size: 14px;
+      font-weight: normal;
+      padding: 3px;
+      > .website > a {
+        color: #b19525;
+      }
+    }
+  }
+}

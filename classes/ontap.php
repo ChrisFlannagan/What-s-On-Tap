@@ -24,6 +24,7 @@ class OnTap {
 		$lists = new post_types\TapLists();
 		$styles = new taxonomies\Styles();
 		$shortcode = new ShortCode();
+        add_action( 'widgets_init', [ '\whatsontap\OnTap', 'taplist_widget' ], 20 );
 
 		if ( isset( $_POST['ajax_finder'] ) ) {
 			$ajaxhandler = new ajax\AjaxFinder();
@@ -32,7 +33,17 @@ class OnTap {
         if ( isset( $_POST['ajax_bulkimport'] ) ) {
             $ajaxhandler = new ajax\AjaxImport();
         }
+
+        /**
+         * REST API
+         */
+        add_action( 'rest_api_init', [ '\whatsontap\rest_api\TapLists', 'init' ] );
 	}
+
+    public static function taplist_widget() {
+        $widget = new Widget();
+        register_widget( '\whatsontap\Widget' );
+    }
 
 	public static function enqueue() {
 		wp_enqueue_script( WIC_PLUGIN_PREFIX . '-plugin-script', 
@@ -46,7 +57,7 @@ class OnTap {
 	}
 
 	public static function admin_enqueue() {
-		wp_enqueue_script( WIC_PLUGIN_PREFIX . '-pluginadmin-script', 
+		wp_enqueue_script( WIC_PLUGIN_PREFIX . '-pluginadmin-script',
 			WIC_PLUGIN_DIR . 'assets/js/pluginadmin.min.js', array( 'jquery' ), WIC_VER, true );
 		wp_localize_script( WIC_PLUGIN_PREFIX . '-pluginadmin-script', 'form_handler', array(
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
@@ -54,6 +65,6 @@ class OnTap {
 		) );
 
 		wp_enqueue_style( WIC_PLUGIN_PREFIX . '-plugin-css' , WIC_PLUGIN_DIR . '/assets/css/plugin.min.css', array(), WIC_VER );
+        wp_enqueue_style( WIC_PLUGIN_PREFIX . '-plugin-admin-css' , WIC_PLUGIN_DIR . '/assets/css/plugin.admin.min.css', array(), WIC_VER );
 	}
-
 }
